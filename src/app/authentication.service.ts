@@ -48,12 +48,15 @@ export class AuthenticationService {
   }
 
   public checkSession(): Observable<any> {
-    this.auth0.checkSession({ ...AUTH0_CONFIG }, (err, authResult) => {
+    this.auth0.checkSession({ ...AUTH0_CONFIG }, (error, authResult) => {
       if (authResult) {
-        console.log("result", authResult);
+        console.log("Existing session found: ", authResult);
         this.parseSession(authResult);
       } else {
-        console.log("error", err);
+        console.log(
+          "Something went wrong checking for an existing session",
+          error
+        );
       }
     });
   }
