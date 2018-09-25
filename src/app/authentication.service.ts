@@ -34,8 +34,9 @@ export class AuthenticationService {
       this.auth0.parseHash((err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
           const parsedSession = this.parseSession(authResult);
-          console.log("Successfuly authenticated:", parsedSession);
 
+          console.log("Successfuly authenticated:", parsedSession);
+          this.setSession(parsedSession);
           observable.next(parsedSession);
         } else if (err) {
           console.error("There was a proble authenticating:", err);
@@ -50,8 +51,10 @@ export class AuthenticationService {
   public checkSession(): Observable<any> {
     this.auth0.checkSession({ ...AUTH0_CONFIG }, (error, authResult) => {
       if (authResult) {
-        console.log("Existing session found: ", authResult);
-        this.parseSession(authResult);
+        const parsedSession = this.parseSession(authResult);
+
+        console.log("Existing session found: ", parsedSession);
+        this.setSession(parsedSession);
       } else {
         console.log(
           "Something went wrong checking for an existing session",
@@ -66,19 +69,22 @@ export class AuthenticationService {
       authResult.expiresIn * 1000 + new Date().getTime()
     );
 
-    this.expiresAt = expiresAt;
+    return {
+      accessToken: authResult.accessToken,
+      idToken: authResult.idToken,
+      user: {
+        username: authResult.idTokenPayload.nickname,
+        picture: authResult.idTokenPayload.picture
+      },
+      expiresAt
+    };
+  }
+
+  private setSession(authResult): void {
+    this.expiresAt = authResult.expiresAt;
     this.accessToken = authResult.accessToken;
     this.idToken = authResult.idToken;
-    this.user = {
-      username: authResult.idTokenPayload.nickname,
-      picture: authResult.idTokenPayload.picture
-    };
-
-    return {
-      accessToken: this.accessToken,
-      idToken: this.idToken,
-      user: this.user
-    };
+    this.user = authResult.user;
   }
 
   public logout(): void {
