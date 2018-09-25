@@ -25,25 +25,8 @@ export class AuthenticationService {
   public idToken: string;
   public user: object;
 
-  public login(username: string, password: string): Observable<any> {
-    return new Observable(observable => {
-      this.auth0.login(
-        {
-          realm: "cats-and-dogs",
-          username,
-          password
-        },
-        error => {
-          if (error) {
-            observable.error(error);
-          } else {
-            observable.next();
-          }
-        }
-      );
-
-      return { unsubscribe() {} };
-    });
+  public login(): void {
+    this.auth0.authorize();
   }
 
   public handleAuthentication(): Observable<any> {
@@ -65,16 +48,13 @@ export class AuthenticationService {
   }
 
   public checkSession(): Observable<any> {
-    return new Observable(observable => {
-      this.auth0.checkSession({ ...AUTH0_CONFIG }, (err, authResult) => {
-        if (authResult) {
-          observable.next(this.parseSession(authResult));
-        } else {
-          observable.error(err);
-        }
-      });
-
-      return { unsubscribe() {} };
+    this.auth0.checkSession({ ...AUTH0_CONFIG }, (err, authResult) => {
+      if (authResult) {
+        console.log("result", authResult);
+        this.parseSession(authResult);
+      } else {
+        console.log("error", err);
+      }
     });
   }
 
