@@ -29,10 +29,12 @@ export class LoginComponent implements OnInit {
     this.authentication.login(this.username, this.password).subscribe(
       response => {
         console.log("Success authenticating:", response.jwt);
-
-        this.router.navigateByUrl("/");
+        delete this.error;
       },
-      error => console.log("Error authenticating", error)
+      error => {
+        console.log("Error authenticating", error);
+        this.error = error.error_description;
+      }
     );
   }
 }

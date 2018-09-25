@@ -20,7 +20,7 @@ export class PictureService {
   ) {}
 
   private getHeaders(isPrivateRequest: boolean = false): HttpHeaders {
-    if (isPrivateRequest && this.authentication.isLoggedIn()) {
+    if (isPrivateRequest && this.authentication.isAuthenticated()) {
       return new HttpHeaders({
         "Content-Type": "application/json",
         Authorization: `Bearer ${this.authentication.accessToken}`

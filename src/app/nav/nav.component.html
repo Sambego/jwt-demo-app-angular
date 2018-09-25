@@ -7,7 +7,11 @@
   </div>
 
   <div class="nav__container">
-    <auth0-button *ngIf="!authentication.isLoggedIn()" (click)="handleLogin()" [cta]="true">Log in</auth0-button>
-    <auth0-button *ngIf="authentication.isLoggedIn()" (click)="handleLogout()" [cta]="true">Log out</auth0-button>
+    <img *ngIf="authentication.isAuthenticated()" [src]="authentication.user.picture" class="avatar"/>
+    <p *ngIf="authentication.isAuthenticated()" class="nav__user">
+      {{authentication.user.username}}
+    </p>
+    <auth0-button *ngIf="!authentication.isAuthenticated()" (click)="handleLogin()" [cta]="true">Log in</auth0-button>
+    <auth0-button *ngIf="authentication.isAuthenticated()" (click)="handleLogout()" [cta]="true">Log out</auth0-button>
   </div>
 </nav>
