@@ -1,0 +1,10 @@
+<auth0-container>
+  <div class="button-group">
+    <auth0-button (click)="handleGetDog()">Show me a dog</auth0-button>
+    <auth0-button (click)="handleGetCat()">Show me a cat</auth0-button>
+  </div>
+
+  <auth0-error *ngIf="error">{{error}}</auth0-error>
+
+  <img [src]="pictureSource" *ngIf="!error" class="picture"/>
+</auth0-container>

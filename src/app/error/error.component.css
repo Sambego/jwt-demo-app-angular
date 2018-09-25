@@ -1,0 +1,15 @@
+.error {
+  position: relative;
+
+  padding: 16px;
+
+  background-color: #ffd8cc;
+
+  border-radius: 3px;
+}
+
+.error__message {
+  margin: 0;
+
+  color: #801f00;
+}

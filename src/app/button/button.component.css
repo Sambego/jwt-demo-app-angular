@@ -1,0 +1,45 @@
+.button {
+  display: inline-block;
+  min-height: 42px;
+  min-width: 96px;
+  padding: 0 16px;
+  margin-right: 8px;
+
+  background: #f1f1f1;
+
+  border: 1px solid;
+  border-color: currentcolor;
+  border-color: #f1f1f1;
+  border-radius: 3px;
+
+  line-height: 42px;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+  letter-spacing: 1px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+
+  opacity: 1;
+
+  cursor: pointer;
+
+  transition: border-color 0.25s, background 0.25s;
+}
+
+.button--primary {
+  background: #44c7f4;
+
+  border-color: #44c7f4;
+
+  color: #fafafa;
+}
+
+.button--cta {
+  background: #eb5424;
+
+  border-color: #eb5424;
+
+  color: #fafafa;
+}

@@ -1,0 +1,26 @@
+.nav {
+  display: flex;
+  height: 80px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 24px;
+
+  background: #222;
+
+  color: #fff;
+}
+
+.nav__container {
+  display: flex;
+  align-items: center;
+}
+
+.nav__title {
+  display: inline-block;
+  margin-left: 12px;
+
+  font-size: 14px;
+  color: rgb(241, 241, 241);
+  font-weight: 700;
+  letter-spacing: 1.4px;
+}
