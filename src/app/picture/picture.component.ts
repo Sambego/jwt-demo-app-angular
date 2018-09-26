@@ -7,11 +7,19 @@ import { PictureService } from "../picture.service";
   styleUrls: ["./picture.component.css"]
 })
 export class PictureComponent implements OnInit {
-  @Input() pictureSource: string;
+  public picture: string;
+  public error: string;
 
-  constructor(private picture: PictureService) {}
-
-  private error: string;
+  constructor(private pic: PictureService) {
+    this.pic.picture.subscribe(response => {
+      if (response.error) {
+        this.error = response.error.error;
+      } else {
+        delete this.error;
+        this.picture = response.url;
+      }
+    });
+  }
 
   ngOnInit() {
     this.handleGetDog();
@@ -20,24 +28,12 @@ export class PictureComponent implements OnInit {
   public handleGetDog(): void {
     console.log("Fetching dog");
 
-    const request = this.picture.fetchDog().subscribe(response => {
-      this.pictureSource = response.url;
-
-      delete this.error;
-
-      request.unsubscribe();
-    }, error => (this.error = error));
+    this.pic.fetchDog();
   }
 
   public handleGetCat(): void {
     console.log("Fetching cat");
 
-    const request = this.picture.fetchCat().subscribe(response => {
-      this.pictureSource = response.url;
-
-      delete this.error;
-
-      request.unsubscribe();
-    }, error => (this.error = error));
+    this.pic.fetchCat();
   }
 }

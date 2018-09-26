@@ -48,7 +48,7 @@ export class AuthenticationService {
     });
   }
 
-  public checkSession(): Observable<any> {
+  public checkSession(): void {
     this.auth0.checkSession({ ...AUTH0_CONFIG }, (error, authResult) => {
       if (authResult) {
         const parsedSession = this.parseSession(authResult);
