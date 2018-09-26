@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Observable, throwError } from "rxjs";
+import { Observable, Subject, Subscription, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 import {
   HttpClient,
@@ -19,6 +19,9 @@ export class PictureService {
     private http: HttpClient
   ) {}
 
+  private pictureSubject: Subject<any> = new Subject();
+  public picture: Observable<any> = this.pictureSubject;
+
   private getHeaders(isPrivateRequest: boolean = false): HttpHeaders {
     if (isPrivateRequest && this.authentication.isAuthenticated()) {
       return new HttpHeaders({
@@ -35,23 +38,31 @@ export class PictureService {
   private makePictureRequest(
     endpoint: string,
     isPrivateRequest: boolean = false
-  ): Observable<any> {
+  ): Subscription {
     return this.http
       .get(`${API_URL}/${endpoint}`, {
         headers: this.getHeaders(isPrivateRequest)
       })
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError))
+      .subscribe(
+        response => {
+          this.pictureSubject.next(response);
+        },
+        error => {
+          this.pictureSubject.next(error);
+        }
+      );
   }
 
-  private handleError(error: HttpErrorResponse) {
-    return throwError(error.error.error);
+  private handleError(error: HttpErrorResponse): Observable<any> {
+    return throwError(error);
   }
 
-  public fetchDog(): Observable<any> {
-    return this.makePictureRequest("dog");
+  public fetchDog(): void {
+    this.makePictureRequest("dog");
   }
 
-  public fetchCat(): Observable<any> {
-    return this.makePictureRequest("cat", true);
+  public fetchCat(): void {
+    this.makePictureRequest("cat", true);
   }
 }
